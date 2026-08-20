@@ -1,0 +1,285 @@
+{% extends "Base.html" %}
+{%load static %}
+{% block content %}
+           
+            <div class="page-breadcrumb">
+                <div class="row">
+                    <div class="col-7 align-self-center">
+                        {% comment %} <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Good Morning Jason!</h3> {% endcomment %}
+                        <div class="d-flex align-items-center">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb m-0 p-0">
+                                    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a>
+                                    </li>
+                                    <li class="breadcrumb-item"><a href="{% url 'searchDoctorDetails' %}">Doctor Service</a>
+                                    </li>
+                                    <li class="breadcrumb-item"><a href="{% url 'doctorDetails' %}">Doctor Update</a>
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div> 
+                    <div class="col-5 align-self-center">
+                        <div class="customize-input float-right">
+                            {% comment %} <select class="custom-select custom-select-set form-control bg-white border-0 custom-shadow custom-radius">
+                                <option selected>Aug 19</option>
+                                <option value="1">July 19</option>
+                                <option value="2">Jun 19</option>
+                            </select> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="container-fluid">
+                <div class="card">
+                {{doctor_data}}
+                    <div class="card-body">
+                        <form id="update-form" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col 12 col-lg-4">
+                                    <label for="doctorID" class="form-label">Doctor ID <font class="text-danger">*</font></label>
+                                    <input type="text" name="doctor_ID" id="doctorID" readonly value="{{doctor_data.doctor_ID}}" placeholder="D_001" class="form-control" required>
+                                </div>
+                                <div class="col 12 col-lg-4">
+                                    <label for="doctorName" class="form-label">Doctor Name <font class="text-danger">*</font></label>
+                                    <input type="text" name="name" id="doctorName" value="{{doctor_data.name}}" placeholder="Full Name" class="form-control" required>
+                                </div>
+                                <div class="col 12 col-lg-4">
+                                    <label for="contNo" class="form-label">Contact Number <font class="text-danger">*</font></label>
+                                    <input type="text" name="cont_number" id="contNo" value="{{doctor_data.cont_number}}" placeholder="+91 000 000 0000" class="form-control" required>
+                                </div>
+                                <div class="col 12 col-lg-4 mt-3">
+                                    <label for="email" class="form-label">Email ID <font class="text-danger">*</font></label>
+                                    <input type="text" name="email" id="email" value="{{doctor_data.email}}" placeholder="example@gmail.com" class="form-control" required>
+                                </div>
+                                <div class="col 12 col-lg-4 mt-3">
+                                    <label for="email" class="form-label">Gender <font class="text-danger">*</font></label>
+                                    <div class="form-check">
+                                        <div class='form-check-inline'>
+                                            <input class="form-check-input" type="radio" name="gender" id="male" value= "Male" checked>
+                                            <label class="form-check-label" for="gender-radio">Male</label>
+                                            <input class="form-check-input" type="radio" name="gender" id="female" value= "Female">
+                                            <label class="form-check-label" for="gender-radio2">Female</label>
+                                            <input class="form-check-input" type="radio" name="gender" id="other" value= "Other">
+                                            <label class="form-check-label" for="gender-radio3">Other</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                    let gender = document.querySelectorAll('[name="gender"]')
+                                    gender.forEach(Element => {
+                                        if(Element.value == '{{doctor_data.gender}}'){
+                                            Element.setAttribute('checked', 'True')
+                                        }
+                                    });
+                                </script>
+                                <div class="col 12 col-lg-4 mt-3">
+                                    <label for="specialization" class="form-label">Specialization<font class="text-danger">*</font></label>
+                                    <input type="text" name="specialization" value="{{doctor_data.specialization}}" id="specialization" class="form-control" required>
+                                </div>
+                                <div class="col 12 col-lg-4 mt-3">
+                                    <label for="idType" class="form-label">ID Type <font class="text-danger">*</font></label>
+                                    <div class="form-check">
+                                        <div class='form-check-inline'>
+                                            <input class="form-check-input" type="radio" name="id_type" id="aadhar" value="Aadhar" checked>
+                                            <label class="form-check-label" for="idradio">Aadhar</label>
+                                            <input class="form-check-input" type="radio" name="id_type" id="pan" value="PAN">
+                                            <label class="form-check-label" for="idradio2">PAN</label>
+                                            <input class="form-check-input" type="radio" name="id_type" id="voterID" value="Voter ID">
+                                            <label class="form-check-label" for="idradio3">Voter ID</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                    let id_type = document.querySelectorAll('[name="id_type"]')
+                                    id_type.forEach(Element => {
+                                        if(Element.value == '{{doctor_data.id_type}}'){
+                                            Element.setAttribute('checked', 'True')
+                                        }
+                                    });
+                                </script>
+                                <div class="col 12 col-lg-4 mt-3">
+                                    <label for="idNumber" class="form-label">ID Number <font class="text-danger">*</font></label>
+                                    <input type="text" name="id_number" value="{{doctor_data.id_number}}" id="idNumber" class="form-control" required>
+                                </div>
+                                <div class="col 12 col-lg-4 mt-3">    
+                                    <label for="photo" class="form-label"> Photo <font class="text-danger">*</font></label>
+                                    {% if doctor_data.photo %}
+                                        <img src="{{ doctor_data.photo.url }}" height="100" width="100" class="img-fluid" alt="photo">
+                                    {% else %}
+                                        <p class="text-danger">No photo uploaded</p>
+                                    {% endif %}
+                                    <input type="file" name="photo" id="photo" class="form-control" accept="image/*">
+                                </div>     
+                                <div class="col-12 col-lg-4 mt-3">
+                                <label for="state" class="form-label">State <font class="text-danger">*</font></label>
+                                    <select name="state" id="state-select" class="form-control">
+                                        <option value="">--State--</option>
+                                    </select>
+                                </div>
+                                {% comment %} <script>
+                                    document.getElementById('state').value="{{doctor_data.state}}"
+                                </script> {% endcomment %}
+                                <div class="col-12 col-lg-4 mt-3">
+                                    <label for="district" class="form-label">District <font class="text-danger">*</font></label>
+                                    <select name="district" class="form-control" id="dist-select">
+                                        <option value="">--District--</option>
+                                    </select>
+                                </div>
+                                {% comment %} <script>
+                                    document.getElementById('district').value="{{doctor_data.district}}"
+                                </script> {% endcomment %}
+                                <div class="col-12 col-lg-4 mt-3">
+                                    <label for="pin" class="form-label">Pin Code <font class="text-danger">*</font></label>
+                                    <input type="text" name="pin" value="{{doctor_data.pin}}" id="pin" class="form-control">
+                                </div>
+                                <div class="col-12 mt-3">
+                                    <label for="address" class="form-label">Address <font class="text-danger"></font></label>
+                                    <textarea name="address" id="add-text" class="form-control" style="resize: none;">{{doctor_data.address}}</textarea>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <button type="submit" class="btn btn-primary mx-5">Update</button>
+                                        <button type="button" class="btn btn-danger">Reset</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+                document.getElementById('update-form').addEventListener("submit", function(e){
+                    e.preventDefault();
+                    Swal.fire({
+                        title: "Are you sure !",
+                        text: "You want to update the record !",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, update it !"
+                    })
+                    .then((result) => {
+                        if (result.isConfirmed){
+                            let doctor_data=document.getElementById('update-form');
+                            let final_Data=new FormData(doctor_data);
+                            fetch("/Patients/updateDoctorDetails/{{doctor_data.id}}/Update/",{
+                                method: "POST",
+                                body: final_Data,
+                                headers: {
+                                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                // console.log(data)
+                                if (data.success){
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: data.message,
+                                        icon: "success"
+                                    })
+                                    .then((result) => {
+                                        window.location.reload()
+                                    })
+                                }
+                                else{
+                                    Swal.fire({
+                                        title: "Oops !",
+                                        text: data.message,
+                                        icon: "error"
+                                    })
+                                }
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                        }
+                    })
+                });
+            </script>
+
+            <script>
+                // Data received from Django
+                const locationData = {{ state_district_json|default:"{}"|safe }};
+
+                // Saved values from the database
+                const savedState = "{{ doctor_data.state|escapejs }}";
+                const savedDistrict = "{{ doctor_data.district|escapejs }}";
+
+                document.addEventListener("DOMContentLoaded", function () {
+                
+                    const stateSelect = document.getElementById("state-select");
+                    const districtSelect = document.getElementById("dist-select");
+
+
+                    // Show districts for the selected state
+                    function loadDistricts(state, selectedDistrict = "") {
+                    
+                        // Clear old districts
+                        districtSelect.innerHTML = '<option value="">--District--</option>';
+
+                        // If no state is selected, disable district dropdown
+                        if (!state || !locationData[state]) {
+                            districtSelect.disabled = true;
+                            return;
+                        }
+
+                        // Enable district dropdown
+                        districtSelect.disabled = false;
+
+                        // Add districts
+                        locationData[state].forEach(function (district) {
+                        
+                            const option = document.createElement("option");
+
+                            option.value = district;
+                            option.textContent = district;
+
+                            // Select saved district
+                            if (district === selectedDistrict) {
+                                option.selected = true;
+                            }
+
+                            districtSelect.appendChild(option);
+                        });
+                    }
+
+
+                    // Add all states to the state dropdown
+                    Object.keys(locationData).sort().forEach(function (state) {
+                    
+                        const option = document.createElement("option");
+
+                        option.value = state;
+                        option.textContent = state;
+
+                        // Select saved state
+                        if (state === savedState) {
+                            option.selected = true;
+                        }
+
+                        stateSelect.appendChild(option);
+                    });
+
+
+                    // Load saved districts when the page opens
+                    if (savedState) {
+                        loadDistricts(savedState, savedDistrict);
+                    }
+
+
+                    // Load new districts when state changes
+                    stateSelect.addEventListener("change", function () {
+                        loadDistricts(this.value);
+                    });
+
+                });
+            </script>
+{% endblock content %} 

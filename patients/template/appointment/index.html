@@ -1,0 +1,146 @@
+{% extends "Base.html" %}
+{%load static %}
+{% block content %}
+           
+            <div class="page-breadcrumb">
+                <div class="row">
+                    <div class="col-7 align-self-center">
+                        {% comment %} <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Good Morning Jason!</h3> {% endcomment %}
+                        <div class="d-flex align-items-center">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb m-0 p-0">
+                                    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a>
+                                    </li>
+                                    <li class="breadcrumb-item"><a href="{% url 'searchAppointmentDetails' %}">Appointment Service</a>
+                                    </li>
+                                    <li class="breadcrumb-item"><a href="{% url 'appointmentDetails' %}">Appointment Details</a>
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div> 
+                    <div class="col-5 align-self-center">
+                        <div class="customize-input float-right">
+                            {% comment %} <select class="custom-select custom-select-set form-control bg-white border-0 custom-shadow custom-radius">
+                                <option selected>Aug 19</option>
+                                <option value="1">July 19</option>
+                                <option value="2">Jun 19</option>
+                            </select> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="{% url 'appointmentDetails' %}" id="reg-form" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col 12 col-lg-4">
+                                    <label for="appointmentID" class="form-label">Appointment ID <font class="text-danger">*</font></label>
+                                    <input type="text" name="appointment_ID" id="appointmentID" value="{{data.appointment_ID}}" placeholder="AP_001" class="form-control" readonly required>
+                                </div>
+                                <div class="col 12 col-lg-4">
+                                    <label for="doctorID" class="form-label">Doctor ID <font class="text-danger">*</font></label>
+                                    {% comment %} <input type="text" name="doctor_ID" id="doctorID" placeholder="D_001" class="form-control" required> {% endcomment %}
+                                    <select name="doctor_ID" id="doctor_ID" class="form-control" required>
+                                        <option value="" selected disabled>Select Doctor ID</option>
+                                        {% for x in data.doctor_Data  %}
+                                            <option value="{{x.doctor_ID}}">{{x.doctor_ID}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col 12 col-lg-4">
+                                    <label for="patientID" class="form-label">Patient ID <font class="text-danger">*</font></label>
+                                    {% comment %} <input type="text" name="patient_ID" id="patientID" placeholder="P_001" class="form-control" required> {% endcomment %}
+                                    <select name="patient_ID" id="patientID" class="form-control" required>
+                                        <option value="" selected disabled>Select Patient ID</option>
+                                        {% for x in data.patient_Data  %}
+                                            <option value="{{x.patient_ID}}">{{x.patient_ID}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col 12 col-lg-4 mt-3">
+                                    <label for="appointmentDate" class="form-label">Appointment Date <font class="text-danger">*</font></label>
+                                    <input type="date" name="appointment_Date" id="appointmentDate" class="form-control" required>
+                                </div>
+                                <div class="col 12 col-lg-4 mt-3">
+                                    <label for="appointmentTime" class="form-label">Appointment Time <font class="text-danger">*</font></label>
+                                    <input type="time" name="appointment_Time" id="appointmentTime" class="form-control" required>
+                                </div>
+                                <div class="col 12 col-lg-4 mt-3">
+                                    <label for="status" class="form-label">Status <font class="text-danger">*</font></label>
+                                    <select name="status" class="form-control">
+                                        <option value="">Status</option>
+                                        <option value="confirm">Visited</option>
+                                        <option value="pending">Booked</option>
+                                        <option value="cancelled">Cancelled</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <button type="submit" class="btn btn-primary mx-5">Submit</button>
+                                        <button type="button" class="btn btn-danger">Reset</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+                document.getElementById('reg-form').addEventListener("submit", function(e){
+                    e.preventDefault();
+                    Swal.fire({
+                        title: "Are you sure !",
+                        text: "You want to save the record !",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, save it !"
+                    })
+                    .then((result) => {
+                        if (result.isConfirmed){
+                            let appointment_Data=document.getElementById('reg-form');
+                            let final_Data=new FormData(appointment_Data);
+                            fetch("/Patients/appointmentDetails/",{
+                                method: "POST",
+                                body: final_Data,
+                                headers: {
+                                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                // console.log(data)
+                                if (data.success){
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: data.message,
+                                        icon: "success"
+                                    })
+                                    .then((result) => {
+                                        window.location.reload()
+                                    })
+                                }
+                                else{
+                                    Swal.fire({
+                                        title: "Oops !",
+                                        text: data.message,
+                                        icon: "error"
+                                    })
+                                }
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                        }
+                    })
+                });
+            </script>
+{% endblock content %} 

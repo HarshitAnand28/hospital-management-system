@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System - Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins',sans-serif;
+        }
+
+        body{
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:linear-gradient(135deg,#0f4c81,#0aa1dd,#36d1dc);
+            overflow:hidden;
+        }
+
+        body::before{
+            content:"";
+            position:absolute;
+            width:500px;
+            height:500px;
+            background:rgba(255,255,255,.08);
+            border-radius:50%;
+            top:-180px;
+            right:-150px;
+        }
+
+        body::after{
+            content:"";
+            position:absolute;
+            width:400px;
+            height:400px;
+            background:rgba(255,255,255,.06);
+            border-radius:50%;
+            bottom:-150px;
+            left:-120px;
+        }
+
+        .login-box{
+            position:relative;
+            width:520px;
+            background:rgba(255,255,255,.15);
+            backdrop-filter:blur(18px);
+            border:1px solid rgba(255,255,255,.25);
+            border-radius:20px;
+            padding:50px;
+            color:#fff;
+            box-shadow:0 20px 50px rgba(0,0,0,.25);
+        }
+
+        .logo{
+            width:90px;
+            height:90px;
+            margin:auto;
+            border-radius:50%;
+            background:#fff;
+            color:#0f4c81;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-size:40px;
+            margin-bottom:20px;
+            box-shadow:0 5px 20px rgba(0,0,0,.2);
+        }
+
+        .login-box h2{
+            text-align:center;
+            font-size:28px;
+            margin-bottom:5px;
+        }
+
+        .subtitle{
+            text-align:center;
+            color:#f1f1f1;
+            font-size:14px;
+            margin-bottom:30px;
+        }
+
+        .input-group{
+            margin-bottom:22px;
+        }
+
+        .input-group label{
+            display:block;
+            margin-bottom:8px;
+            font-size:14px;
+        }
+
+        .input-group input{
+            width:100%;
+            height:55px;
+            border:none;
+            outline:none;
+            border-radius:12px;
+            padding:0 18px;
+            font-size:16px;
+            background:rgba(255,255,255,.95);
+            color:#333;
+        }
+
+        .password-box{
+            position:relative;
+        }
+
+        .password-box input{
+            padding-right:50px;
+        }
+
+        .eye{
+            position:absolute;
+            right:18px;
+            top:50%;
+            transform:translateY(-50%);
+            color:#666;
+            cursor:pointer;
+            font-size:18px;
+        }
+
+        .options{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:25px;
+            font-size:14px;
+        }
+
+        .options a{
+            color:#fff;
+            text-decoration:none;
+        }
+
+        .options a:hover{
+            text-decoration:underline;
+        }
+
+        .account-links{
+            margin-top:25px;
+            text-align:center;
+            color:#fff;
+            font-size:15px;
+        }
+
+        .account-links a{
+            color:#fff;
+            font-weight:600;
+            text-decoration:none;
+            transition:.3s;
+        }
+
+        .account-links a:hover{
+            color:#ffe082;
+            text-decoration:underline;
+        }
+
+        .login-btn{
+            width:100%;
+            height:55px;
+            border:none;
+            border-radius:12px;
+            background:#ffffff;
+            color:#0f4c81;
+            font-size:17px;
+            font-weight:600;
+            cursor:pointer;
+            transition:all .35s ease;
+        }
+
+        .login-btn:hover{
+            background:linear-gradient(135deg,#0f4c81,#0aa1dd);
+            color:#fff;
+            transform:translateY(-3px);
+            box-shadow:0 10px 25px rgba(15,76,129,.45);
+        }
+
+        .footer{
+            text-align:center;
+            margin-top:25px;
+            font-size:13px;
+            color:#f5f5f5;
+        }
+
+        @media(max-width:600px){
+            .login-box{
+                width:95%;
+                padding:30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <div class="logo">
+            <i class="fa-solid fa-hospital"></i>
+        </div>
+        <h2>Hospital Management</h2>
+        <p class="subtitle">Secure Login Portal</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="input-group">
+                <label>User Name</label>
+                <input type="text" id="username" name="username" placeholder="Enter your user name"required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <div class="password-box">
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <span class="eye" id="togglePassword">
+                        <i class="fa-solid fa-eye"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="options">
+                <label>
+                    <input type="checkbox">Remember Me
+                </label>
+                <a href="{% url "reset_password" %}">Forgot Password?</a>
+            </div>
+            <button type = "submit"class="login-btn">Login</button>
+            <div class="account-links">Don't have an account?
+                <a href="{% url "sign_up" %}">Create Account</a>
+            </div>
+        </form>
+        <div class="footer">© 2026 Hospital Management System</div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {% if messages %}
+        <script>
+            {% for messages in messages %}
+                Swal.fire({
+                    icon: '{{messages.tags}}',
+                    text: '{{messages}}'
+                })
+            {% endfor %}
+        </script>
+    {% endif %}
+    <script>
+        const togglePassword=document.getElementById("togglePassword");
+        const password=document.getElementById("password");
+        togglePassword.addEventListener("click",function(){
+            const type=password.getAttribute("type")==="password"?"text":"password";
+            password.setAttribute("type",type);
+            this.innerHTML=type==="password"
+            ?'<i class="fa-solid fa-eye"></i>'
+            :'<i class="fa-solid fa-eye-slash"></i>';
+        });
+    </script>
+</body>
+</html>

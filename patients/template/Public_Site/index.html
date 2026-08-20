@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareBridge Hospital Management System</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #1f2937;
+            background: #f8fbff;
+        }
+        a { text-decoration: none; color: inherit; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+        .topbar {
+            background: #0f4c81;
+            color: white;
+            padding: 12px 0;
+            font-size: 14px;
+        }
+        .topbar .container {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .brand {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #0f4c81;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            font-weight: 600;
+        }
+        .btn {
+            display: inline-block;
+            padding: 11px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.2s ease;
+        }
+        .btn-primary {
+            background: #0f4c81;
+            color: white;
+        }
+        .btn-primary:hover { background: #0b3558; }
+        .btn-secondary {
+            background: #e9f2fb;
+            color: #0f4c81;
+        }
+        .hero {
+            background: linear-gradient(rgba(15,76,129,0.8), rgba(15,76,129,0.8)),
+                        url('https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1600&q=80') center/cover;
+            color: white;
+            padding: 90px 0;
+        }
+        .hero-content {
+            max-width: 650px;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+        .section {
+            padding: 70px 0;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #0f4c81;
+        }
+        .section-subtitle {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto 40px;
+            color: #556174;
+            line-height: 1.6;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+        }
+        .card h3 { margin-top: 0; color: #0f4c81; }
+        .card p { color: #5b6472; line-height: 1.7; }
+        .doctor-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+        }
+        .doctor-card {
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        .doctor-card img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+        }
+        .doctor-card .content {
+            padding: 18px;
+        }
+        .doctor-card .specialty {
+            color: #0f4c81;
+            font-weight: 700;
+        }
+        .appointment-box {
+            background: #eff6ff;
+            border: 1px solid #cfe0f4;
+            border-radius: 16px;
+            padding: 30px;
+        }
+        form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #cdd8e6;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        textarea { min-height: 130px; resize: vertical; grid-column: span 2; }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .blog-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+        }
+        .blog-card span {
+            display: inline-block;
+            margin-bottom: 10px;
+            color: #0f4c81;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .contact-strip {
+            background: #0f4c81;
+            color: white;
+            padding: 24px 0;
+            text-align: center;
+        }
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 28px;
+            align-items: start;
+        }
+        .contact-card {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+        }
+        .contact-card h3 {
+            margin-top: 0;
+            color: #0f4c81;
+        }
+        .contact-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0;
+            display: grid;
+            gap: 14px;
+        }
+        .contact-list li {
+            color: #485466;
+            line-height: 1.6;
+        }
+        .contact-form {
+            background: #eff6ff;
+            border: 1px solid #cfe0f4;
+            border-radius: 16px;
+            padding: 30px;
+        }
+        footer {
+            background: #102a43;
+            color: #d7e4f3;
+            padding: 30px 0;
+            text-align: center;
+        }
+        @media (max-width: 900px) {
+            .grid-3, .doctor-grid, .blog-grid, form { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 640px) {
+            .grid-3, .doctor-grid, .blog-grid, form { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.2rem; }
+            .full, textarea { grid-column: span 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="container">
+            <span>24/7 Emergency Care • Advanced Diagnostics • Trusted Doctors</span>
+            <span>Call: +1 (800) 555-0123</span>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="container nav-inner">
+            <div class="brand">CareBridge Hospital</div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#blog">Blog</a>
+                <a href="#contact">Contact Us</a>
+                <a href="#appointment" class="btn btn-primary">Book Appointment</a>
+                <a href="{% url "login" %}" class="btn btn-secondary">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="container hero-content">
+            <h1>Smart Hospital Management for Better Care</h1>
+            <p>
+                Manage appointments, patient records, doctor availability, and medical services through a modern
+                hospital management system designed for excellence in care and patient experience.
+            </p>
+            <a href="#appointment" class="btn btn-primary">Book Appointment</a>
+        </div>
+    </section>
+
+    <section class="section" id="about">
+        <div class="container">
+            <h2 class="section-title">About Our Hospital</h2>
+            <p class="section-subtitle">
+                CareBridge Hospital is dedicated to delivering patient-centered healthcare with modern infrastructure,
+                experienced medical professionals, and streamlined hospital operations.
+            </p>
+            <div class="grid-3">
+                <div class="card">
+                    <h3>Experienced Specialists</h3>
+                    <p>Our team includes top doctors from cardiology, neurology, pediatrics, orthopedics, and more.</p>
+                </div>
+                <div class="card">
+                    <h3>Digital Hospital Workflow</h3>
+                    <p>From patient registration to appointment scheduling, our system improves speed and reliability.</p>
+                </div>
+                <div class="card">
+                    <h3>Patient First Approach</h3>
+                    <p>We focus on comfort, transparency, and timely care so every patient feels supported from day one.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="background:#fff;">
+        <div class="container">
+            <h2 class="section-title">Our Doctors</h2>
+            <p class="section-subtitle">Meet some of our leading specialists and their areas of expertise.</p>
+            <div class="doctor-grid">
+                <div class="doctor-card">
+                    <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=800&q=80" alt="Dr. Emily Carter">
+                    <div class="content">
+                        <h3>Dr. Emily Carter</h3>
+                        <div class="specialty">Cardiology</div>
+                    </div>
+                </div>
+                <div class="doctor-card">
+                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=800&q=80" alt="Dr. Michael Lee">
+                    <div class="content">
+                        <h3>Dr. Michael Lee</h3>
+                        <div class="specialty">Neurology</div>
+                    </div>
+                </div>
+                <div class="doctor-card">
+                    <img src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=800&q=80" alt="Dr. Sophia Patel">
+                    <div class="content">
+                        <h3>Dr. Sophia Patel</h3>
+                        <div class="specialty">Pediatrics</div>
+                    </div>
+                </div>
+                <div class="doctor-card">
+                    <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=800&q=80" alt="Dr. Daniel Brooks">
+                    <div class="content">
+                        <h3>Dr. Daniel Brooks</h3>
+                        <div class="specialty">Orthopedics</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="appointment">
+        <div class="container">
+            <h2 class="section-title">Appointment Booking</h2>
+            <p class="section-subtitle">Schedule your consultation with our hospital team using the form below.</p>
+            <div class="appointment-box">
+                <form action="{% url 'CareBridge' %}" id="reg-form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                    <label>
+                        Full Name
+                        <input type="text" name="full_name" placeholder="Enter your full name">
+                    </label>
+                    <label>
+                        Phone Number
+                        <input type="tel" name="ph_no" placeholder="Enter your phone number">
+                    </label>
+                    <label>
+                        Department
+                        <select name="dept">
+                            <option value="">Select Department</option>
+                            <option value="Cardiology">Cardiology</option>
+                            <option value="Neurology">Neurology</option>
+                            <option value="Pediatrics">Pediatrics</option>
+                            <option value="Orthopedics">Orthopedics</option>
+                        </select>
+                    </label>
+                    <label class="full">
+                        Doctor
+                        <select name="all_doctor">
+                            <option value="">Select Doctor</option>
+                            <option value="Dr. Emily Carter">Dr. Emily Carter</option>
+                            <option value="Dr. Michael Lee">Dr. Michael Lee</option>
+                            <option value="Dr. Sophia Patel">Dr. Sophia Patel</option>
+                            <option value="Dr. Daniel Brooks">Dr. Daniel Brooks</option>
+                        </select>
+                    </label>
+                    <label>
+                        Preferred Date
+                        <input type="date" name="date">
+                    </label>
+                    <textarea placeholder="Tell us about your symptoms or consultation reason"></textarea>
+                    <div class="full">
+                        <button type="button" class="btn btn-primary">Confirm Appointment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="blog">
+        <div class="container">
+            <h2 class="section-title">Health Blog</h2>
+            <p class="section-subtitle">Read helpful articles and updates from our medical experts.</p>
+            <div class="blog-grid">
+                <div class="blog-card">
+                    <span>Wellness</span>
+                    <h3>5 Ways to Stay Healthy This Season</h3>
+                    <p>Simple preventive care habits can improve energy, immunity, and long-term wellbeing.</p>
+                </div>
+                <div class="blog-card">
+                    <span>Patient Care</span>
+                    <h3>How Digital Scheduling Improves Visits</h3>
+                    <p>Online appointment systems help reduce delays and create more organized patient flow.</p>
+                </div>
+                <div class="blog-card">
+                    <span>Medical Tips</span>
+                    <h3>Understanding Common Heart Health Risks</h3>
+                    <p>Early detection and routine check-ups can significantly support heart wellness.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="contact">
+        <div class="container">
+            <h2 class="section-title">Contact Us</h2>
+            <p class="section-subtitle">Reach out to our care team for appointments, inquiries, or patient support.</p>
+            <div class="contact-layout">
+                <div class="contact-card">
+                    <h3>CareBridge Hospital</h3>
+                    <p>We’re here to help with medical appointments, patient assistance, and service requests.</p>
+                    <ul class="contact-list">
+                        <li><strong>Email:</strong> support@carebridgehospital.com</li>
+                        <li><strong>Phone:</strong> +1 (800) 555-0123</li>
+                        <li><strong>Address:</strong> 148 Health Avenue, New York, NY 10001</li>
+                        <li><strong>Hours:</strong> Monday - Sunday • 24/7 Emergency Support</li>
+                    </ul>
+                </div>
+                <div class="contact-form">
+                    <form>
+                        <label>
+                            Your Name
+                            <input type="text" placeholder="Enter your name">
+                        </label>
+                        <label>
+                            Email Address
+                            <input type="email" placeholder="Enter your email">
+                        </label>
+                        <label>
+                            Subject
+                            <input type="text" placeholder="How can we help?">
+                        </label>
+                        <label>
+                            Phone
+                            <input type="tel" placeholder="Enter your phone number">
+                        </label>
+                        <textarea placeholder="Write your message here"></textarea>
+                        <div class="full">
+                            <button type="button" class="btn btn-primary">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-strip">
+        <div class="container">
+            <h2>Need Immediate Assistance?</h2>
+            <p>Call our emergency line at +1 (800) 555-0123 for urgent medical support.</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            © 2026 CareBridge Hospital Management System. All rights reserved.
+        </div>
+    </footer>
+</body>
+</html>

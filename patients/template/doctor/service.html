@@ -1,0 +1,185 @@
+{% extends "Base.html" %}
+{%load static %}
+{% block content %}      
+            <div class="page-breadcrumb">
+                <div class="row">
+                    <div class="col-7 align-self-center">
+                        {% comment %} <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Good Morning Jason!</h3> {% endcomment %}
+                        <div class="d-flex align-items-center">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb m-0 p-0">
+                                    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a>
+                                    </li>
+                                    <li class="breadcrumb-item"><a href="{% url 'searchDoctorDetails' %}">Doctor Service</a>
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <a href="{% url "doctorDetails" %}" class="float-right btn btn-sm btn-primary" style="text-decoration: none; color: white;">+ Add New</a>
+                    </div>
+                    <div class="col-5 align-self-center">
+                        <div class="customize-input float-right">
+                            {% comment %} <select class="custom-select custom-select-set form-control bg-white border-0 custom-shadow custom-radius">
+                                <option selected>Aug 19</option>
+                                <option value="1">July 19</option>
+                                <option value="2">Jun 19</option>
+                            </select> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="{% url 'searchDoctorDetails' %}" id="search-form" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col 12 col-lg-4">
+                                    <label for="doctorID" class="form-label">Doctor ID <font class="text-danger">*</font></label>
+                                    <!-- <input type="text" name="doctor_ID" id="doctorID" placeholder="D_001" class="form-control"> -->
+                                     <select name="doctor_ID" id="doctor_ID" class="form-control" >
+                                        <option value="" selected disabled>Select Doctor ID</option>
+                                        {% for x in data.doctor_Data  %}
+                                            <option value="{{x.doctor_ID}}">{{x.doctor_ID}}</option>
+                                        {% endfor %}
+                                     </select>
+                                </div>
+                                <div class="col 12 col-lg-4">
+                                    <label for="doctorName" class="form-label">Doctor Name <font class="text-danger">*</font></label>
+                                    <!-- <input type="text" name="name" id="doctorName" placeholder="Full Name" class="form-control"> -->
+                                    <select name="name" id="name" class="form-control" >
+                                       <option value="" selected disabled>Select Doctor Name</option>
+                                       {% for x in data.doctor_Data  %}
+                                           <option value="{{x.name}}">{{x.name}}</option>
+                                       {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col 12 col-lg-4">
+                                    <label for="specialization" class="form-label">Specialization<font class="text-danger">*</font></label>
+                                    <!-- <input type="text" name="specialization" id="specialization" class="form-control"> -->
+                                     <select name="specialization" id="specialization" class="form-control" >
+                                        <option value="" selected disabled>Select Specialization</option>
+                                        {% for x in data.doctor_Data  %}
+                                            <option value="{{x.specialization}}">{{x.specialization}}</option>
+                                        {% endfor %}
+                                     </select>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <button type="submit" class="btn btn-primary mx-5">Search</button>
+                                        <button type="button" class="btn btn-danger">Reset</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" style="overflow: auto;">
+                            <table class="table">
+                                <thead>
+                                    <th>S.No</th>
+                                    <th>Doctor&nbsp;ID</th>
+                                    <th style="min-width: 10rem;">Doctor&nbsp;Name</th>
+                                    <th>Contact&nbsp;Number</th>
+                                    <th>Email&nbsp;ID</th>
+                                    <th>Gender</th>
+                                    <th>Specialization</th>
+                                    <th>ID&nbsp;Proof</th>
+                                    <th>ID&nbsp;Proof&nbsp;Number</th>
+                                    <th>Photo</th>
+                                    <th style="min-width: 15rem;">Address</th>
+                                    <th>Action</th>
+                                </thead>
+                                <tbody id="reg_data">
+                                    <tr>
+                                        <td colspan="12"><div class="alert alert-info">Search to see the records...</div></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+                function deleteReg(doctor_ID){
+                    // alert('deleteWorked')
+                    Swal.fire({
+                        title: "Are you sure ?",
+                        text: "You want to Delete the record !",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmCancelButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, delete it !"
+                    })
+                    .then((result) => {
+                        if (result.isConfirmed){
+                            fetch(`/Patients/deleteDoctorDetails/${doctor_ID}/Delete/`, {
+                                method: "POST",
+                                headers: {
+                                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                // console.log(data)
+                                if (data.success){
+                                    Swal.fire({
+                                        title: "Success!",
+                                        text: data.message,
+                                        icon: "success"
+                                    }).then((result) => {
+                                        window.location.reload()
+                                    });
+                                }
+                                else{
+                                    Swal.fire({
+                                        title: "Ooops!",
+                                        text: data.message,
+                                        icon: "error"
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            });
+                        }
+                    })
+                }
+                document.getElementById("search-form").addEventListener("submit", function(e){
+                    e.preventDefault();
+                    let doctor_data = document.getElementById("search-form");
+                    let final_data = new FormData(doctor_data);
+                    fetch("/Patients/searchDoctorDetails/Service/",{
+                        method: "POST",
+                        body: final_data,
+                        headers:{
+                            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // console.log(data)
+                        if(data.success){
+                            document.getElementById('reg_data').innerHTML = data.html_data
+                        }
+                        else{
+                            Swal.fire({
+                                title: "Oops !",
+                                text: data.message,
+                                icon: "info"
+                            })
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                })
+            </script>
+{% endblock content %} 

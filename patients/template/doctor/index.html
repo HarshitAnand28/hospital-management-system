@@ -1,0 +1,289 @@
+{% extends "Base.html" %}
+{% load static %}
+{% block content %}
+            <div class="page-breadcrumb">
+                <div class="row">
+                    <div class="col-7 align-self-center">
+                        {% comment %} <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Good Morning Jason!</h3> {% endcomment %}
+                        <div class="d-flex align-items-center">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb m-0 p-0">
+                                    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a>
+                                    </li>
+                                    <li class="breadcrumb-item"><a href="{% url 'searchDoctorDetails' %}">Doctor Service</a>
+                                    </li>
+                                    <li class="breadcrumb-item"><a href="{% url 'doctorDetails' %}">Doctor Registration</a>
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div> 
+                    <div class="col-5 align-self-center">
+                        <div class="customize-input float-right">
+                            {% comment %} <select class="custom-select custom-select-set form-control bg-white border-0 custom-shadow custom-radius">
+                                <option selected>Aug 19</option>
+                                <option value="1">July 19</option>
+                                <option value="2">Jun 19</option>
+                            </select> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <style>
+                #s1, #s2, #s3{
+                    font-size: 14px;
+                }
+                .s{
+                    font-size: 14px;
+                }
+            </style>
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="{% url 'doctorDetails' %}" id="reg-form" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col 12 col-lg-4">
+                                    <label for="doctorID" class="form-label">Doctor ID <font class="text-danger">*</font></label>
+                                    <input type="text" name="doctor_ID" id="doctorID" placeholder="DR_001" value="{{data.doctor_ID}}" class="form-control lostfocus" onfocus="gainedfocus('#doctorID')" readonly required><br><span class="s"></span>
+                                </div>
+                                <div class="col 12 col-lg-4">
+                                    <label for="doctorName" class="form-label">Doctor Name <font class="text-danger">*</font></label>
+                                    <input type="text" name="name" id="doctorName" placeholder="Full Name" class="form-control lostfocus verifychar" onfocus="gainedfocus('#doctorName')"><br><span class="s"></span>
+                                </div>
+                                <div class="col 12 col-lg-4">
+                                    <label for="contNo" class="form-label">Contact Number <font class="text-danger">*</font></label>
+                                    <input type="text" name="cont_number" id="contNo" placeholder="+91 000 000 0000" class="form-control lostfocus onlydigits" onfocus="gainedfocus('#contNo')"><br><span class="s"></span>
+                                </div>
+                                <div class="col 12 col-lg-4 mt-3">
+                                    <label for="email" class="form-label">Email ID <font class="text-danger">*</font></label>
+                                    <input type="text" name="email" id="email" placeholder="example@gmail.com" class="form-control lostfocus" onfocus="gainedfocus('#email')"><br><span class="s"></span>
+                                </div>
+                                <div class="col 12 col-lg-4 mt-3">
+                                    <label for="email" class="form-label">Gender <font class="text-danger">*</font></label>
+                                    <div class="form-check">
+                                        <div class='form-check-inline'>
+                                            <input class="form-check-input" type="radio" name="gender" id="male" value= "Male" checked>
+                                            <label class="form-check-label" for="gender-radio">Male&nbsp;</label>
+                                            <input class="form-check-input" type="radio" name="gender" id="female" value= "Female">
+                                            <label class="form-check-label" for="gender-radio2">Female&nbsp; </label>
+                                            <input class="form-check-input" type="radio" name="gender" id="other" value= "Other">
+                                            <label class="form-check-label" for="gender-radio3">Other</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col 12 col-lg-4 mt-3">
+                                    <label for="specialization" class="form-label">Specialization<font class="text-danger">*</font></label>
+                                    <input type="text" name="specialization" id="specialization" class="form-control lostfocus verifychar" onfocus="gainedfocus('#specialization')"><br><span class="s"></span>
+                                </div>
+                                <div class="col 12 col-lg-4 mt-3">
+                                    <label for="idType" class="form-label">ID Type <font class="text-danger">*</font></label>
+                                    <div class="form-check">
+                                        <div class='form-check-inline'>
+                                            <input class="form-check-input" type="radio" name="id_type" id="aadhar" value="Aadhar" checked>
+                                            <label class="form-check-label" for="idradio">Aadhar</label>
+                                            <input class="form-check-input" type="radio" name="id_type" id="pan" value="PAN">
+                                            <label class="form-check-label" for="idradio2">PAN</label>
+                                            <input class="form-check-input" type="radio" name="id_type" id="voterID" value="Voter ID">
+                                            <label class="form-check-label" for="idradio3">Voter ID</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col 12 col-lg-4 mt-3">
+                                    <label for="idNumber" class="form-label">ID Number <font class="text-danger">*</font></label>
+                                    <input type="text" name="id_number" id="idNumber" class="form-control lostfocus" onfocus="gainedfocus('#idNumber')"><br><span class="s"></span>
+                                </div>
+                                <div class="col 12 col-lg-4 mt-3">
+                                    <label for="photo" class="form-label">Photo <font class="text-danger">*</font></label>
+                                    <input type="file" name="photo" id="photo" class="form-control photo"><br><span class="s"></span>
+                                    {% comment %} <input type="file" name="photo" id="photo" class="form-control lostfocus photo" onfocus="gainedfocus('#photo')"><br><span class="s"></span> {% endcomment %}
+                                </div>
+                                <div class="col-12 col-lg-4 mt-3">
+                                <label for="state" class="form-label">State <font class="text-danger">*</font></label>
+                                    <select name="state" id="state-select" class="form-control" onfocus="gainedfocus('#state-select')">
+                                        <option value="">--State--</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-lg-4 mt-3">
+                                    <label for="district" class="form-label">District <font class="text-danger">*</font></label>
+                                    <select name="district" class="form-control" id="dist-select" onfocus="gainedfocus('#dist-select')">
+                                        <option value="">--District--</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-lg-4 mt-3">
+                                    <label for="pin" class="form-label">Pin Code <font class="text-danger">*</font></label>
+                                    <input type="text" name="pin" id="pin" class="form-control lostfocus" onfocus="gainedfocus('#pin')"><br><span class="s"></span>
+                                </div>
+                                <div class="col-12 mt-3">
+                                    <label for="address" class="form-label">Address <font class="text-danger"></font></label>
+                                    <textarea name="address" id="add-text" class="form-control" style="resize: none;"></textarea>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <button type="submit" id="sbmt1" class="btn btn-primary mx-5">Submit</button>
+                                        <button type="button" id="reset" class="btn btn-danger">Reset</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script src="https://code.jquery.com/jquery-4.0.0.min.js"></script>
+            <script src="{% static "js/Validation.js" %}"></script>
+            <script>
+                document.getElementById('reg-form').addEventListener("submit", function(e){
+                    e.preventDefault();
+                    Swal.fire({
+                        title: "Are you sure !",
+                        text: "You want to save the record !",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, save it !"
+                    })
+                    .then((result) => {
+                        if (result.isConfirmed){
+                            let doctor_Data=document.getElementById('reg-form');
+                            let final_Data=new FormData(doctor_Data);
+                            fetch("/Patients/doctorDetails/",{
+                                method: "POST",
+                                body: final_Data,
+                                headers: {
+                                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                // console.log(data)
+                                if (data.success){
+                                    Swal.fire({
+                                        title: "Success",
+                                        text: data.message,
+                                        icon: "success"
+                                    })
+                                    .then((result) => {
+                                        window.location.reload()
+                                    })
+                                }
+                                else{
+                                    Swal.fire({
+                                        title: "Oops !",
+                                        text: data.message,
+                                        icon: "error"
+                                    })
+                                }
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            })
+                        }
+                    })
+                });
+
+                //-----Frontend Validation-----\\
+                $('#contNo').on('focusout', function(){
+                    if($(this).val().length<10)
+                    {
+                        $(this).siblings('span').text('Minimum 10 digits are required!');
+                        $(this).siblings('span').css({'color':'red'});
+                        $(this).css({"border":"2px solid red","color":"red"})
+                        return false;
+                    }
+                });
+                $('#contNo').on('focus', function(){
+                    if($(this).val()=="")
+                    {
+                        $(this).siblings('span').text('');
+                        $(this).siblings('span').css({'color':''});
+                        $(this).css({"border":"","color":""})
+                    }
+                });
+                $('#state-select, #dist-select').on('focusout', function(){
+                    if($(this).val()=="")
+                    {
+                        $(this).css({"border":"2px solid red","color":"red"})
+                    }
+                });
+                $('#state-select, #dist-select').on('focus', function(){
+                    if($(this).val()=="")
+                    {
+                        $(this).css({"border":"","color":""})
+                    }
+                });
+                $('#reset').on('click', function(){
+                    location.reload();
+                });
+            </script>
+
+            <script>
+                // Get the state and district data from Django
+                const locationData = {{ data.state_district_json|safe }};
+
+                // Wait until the HTML page is fully loaded
+                document.addEventListener("DOMContentLoaded", function () {
+                
+                    // Get the State dropdown
+                    const stateSelect = document.getElementById("state-select");
+
+                    // Get the District dropdown
+                    const districtSelect = document.getElementById("dist-select");
+
+                    // Add all states to the State dropdown
+                    for (let state in locationData) {
+                    
+                        let option = document.createElement("option");
+
+                        option.value = state;
+                        option.textContent = state;
+
+                        stateSelect.appendChild(option);
+                    }
+
+                    // Run this code when the user selects a state
+                    stateSelect.addEventListener("change", function () {
+                    
+                        // Get the selected state
+                        let selectedState = stateSelect.value;
+
+
+                        // Remove old district options
+                        districtSelect.innerHTML =
+                            '<option value="">-- District --</option>';
+
+
+                        // Check if a state was selected
+                        if (selectedState && locationData[selectedState]) {
+                        
+                            // Enable the District dropdown
+                            districtSelect.disabled = false;
+
+
+                            // Get districts of the selected state
+                            let districts = locationData[selectedState];
+
+
+                            // Add each district to the dropdown
+                            districts.forEach(function (district) {
+                            
+                                let option = document.createElement("option");
+
+                                option.value = district;
+                                option.textContent = district;
+
+                                districtSelect.appendChild(option);
+                            });
+
+                        } else {
+                        
+                            // Disable District dropdown
+                            districtSelect.disabled = true;
+                        }
+                    });
+                });
+            </script>
+{% endblock content %} 
